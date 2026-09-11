@@ -1,0 +1,43 @@
+name: Guld pris tracker
+
+on:
+  schedule:
+    # Runs roughly every 8 minutes. GitHub doesn't guarantee the exact
+    # minute during high load, but it'll be close.
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+
+# Allows this workflow to push the updated last_prices.json file back
+# to the repo using GitHub's automatic built-in token (no extra setup).
+permissions:
+  contents: write
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run price tracker
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python3 scrape_and_compare.py
+
+      - name: Save updated price history
+        run: |
+          git config user.name "guld-price-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add last_prices.json
+          git diff --cached --quiet || git commit -m "Update price history"
+          git push
