@@ -10,5 +10,16 @@
     "9K": "431,00 kr/g",
     "Silver 999": "19,00 kr/g"
   },
-  "guldexperten": {}
+  "guldexperten": {
+    "24K": "1340 Kr/g",
+    "23K": "1242 Kr/g",
+    "22K": "1214 Kr/g",
+    "21K": "1126 Kr/g",
+    "20K": "1050 Kr/g",
+    "18K": "964 Kr/g",
+    "14K": "749 Kr/g",
+    "9K": "431 Kr/g",
+    "Tandguld": "913 Kr/g",
+    "Silver 999": "19 Kr/g"
+  }
 }
